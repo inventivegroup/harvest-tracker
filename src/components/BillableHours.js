@@ -1,46 +1,58 @@
-import React, { useState } from 'react';
-import { calculateTotalBillableHours, numHoursToCrossOff } from '../utils/functions';
-import { InputGroup, FloatingLabel, FormControl, FormSelect } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { sortEntriesByTaskName } from '../utils/functions';
+import React, { useState } from 'react'
+import {
+    calculateTotalBillableHours,
+    numHoursToCrossOff,
+} from '../utils/functions'
+import {
+    InputGroup,
+    FloatingLabel,
+    FormControl,
+    FormSelect,
+} from 'react-bootstrap'
+import { useSelector } from 'react-redux'
+import { sortEntriesByTaskName } from '../utils/functions'
 
-const BillableHours = ({ billableHours, calculatedMinutes }) => {
-
-    const [inputValues, setInputValues] = useState({});
+const BillableHours = ({ billableHours, calculatedMinutes, inputValues: propInputValues, setInputValues: propSetInputValues }) => {
+    const [localInputValues, setLocalInputValues] = useState({})
+    const inputValues = propInputValues || localInputValues
+    const setInputValues = propSetInputValues || setLocalInputValues
     // Calculate total billable hours
-    const totalBillableHours = parseFloat(calculateTotalBillableHours(billableHours).toFixed(2));
-    const filteredTasksArray = useSelector(state => state.tasks.filteredTasks);
-    const allProjectsArray = useSelector(state => state.projects.allProjects);
+    const totalBillableHours = parseFloat(
+        calculateTotalBillableHours(billableHours).toFixed(2)
+    )
+    const filteredTasksArray = useSelector((state) => state.tasks.filteredTasks)
+    const allProjectsArray = useSelector((state) => state.projects.allProjects)
     // const allProjectsArray = testData.projects.allProjects;
     // console.log("allProjectsArray", allProjectsArray);
     // const filteredTasksArray = sortEntriesByTaskName(testData.tasks.filteredTasks);
-    const splitTimeEntries = useSelector(state => state.timeEntries.splitTimeEntries);
-    const [tasksSelected, setTasksSelected] = useState(false);
-    const successMessage = "New entry/entries saved successfully!";
+    const splitTimeEntries = useSelector(
+        (state) => state.timeEntries.splitTimeEntries
+    )
+    const [tasksSelected, setTasksSelected] = useState(false)
+    const successMessage = 'New entry/entries saved successfully!'
 
-    
     // console.log("splitTimeEntries", splitTimeEntries);
 
     const handleTaskChange = (projectCode, taskId) => {
-        setInputValues(prev => ({
+        setInputValues((prev) => ({
             ...prev,
             [projectCode]: {
                 ...prev[projectCode],
                 taskId: taskId,
-                confirmedMinutes: prev[projectCode]?.confirmedMinutes || ''
-            }
-        }));
+                confirmedMinutes: prev[projectCode]?.confirmedMinutes || '',
+            },
+        }))
 
-        setTasksSelected(prev => ({
+        setTasksSelected((prev) => ({
             ...prev,
-            [projectCode]: true
-        }));
-    };
+            [projectCode]: true,
+        }))
+    }
 
     const handleInputChange = (e, projectCode, value) => {
-        console.log("projectCode", projectCode);
-        console.log("value", value);
-        
+        console.log('projectCode', projectCode)
+        console.log('value', value)
+
         // const suggestedMinutesInput = event.target.closest('.entry-form-inputs').querySelector('input[name="suggestedMinutes"]');
         // const suggestedMinutes = parseInt(suggestedMinutesInput.value) || 0; // Default to 0 if not found
 
@@ -63,67 +75,93 @@ const BillableHours = ({ billableHours, calculatedMinutes }) => {
         // }));
 
         // Update the input values state
-        setInputValues(prev => ({
+        setInputValues((prev) => ({
             ...prev,
             [projectCode]: {
-                    confirmedMinutes: value,
-                    taskId: prev[projectCode]?.taskId || '',
-                    // suggestedMinutes: suggestedMinutes, // Add the retrieved suggested minutes here
-                    // projectId: projectId, // Add the retrieved projectId here
-            }
-        }));
-
-
+                confirmedMinutes: value,
+                taskId: prev[projectCode]?.taskId || '',
+                // suggestedMinutes: suggestedMinutes, // Add the retrieved suggested minutes here
+                // projectId: projectId, // Add the retrieved projectId here
+            },
+        }))
     }
 
     const InputFieldComponent = (projectCode) => {
-        const projectEntry = allProjectsArray.find(entry => entry.code === projectCode);
-        const projectId = projectEntry ? projectEntry.id : null; // Get projectId if found
-        const suggestedMinutes = calculatedMinutes[projectCode] || {}; // Get suggested minutes as an object
+        const projectEntry = allProjectsArray.find(
+            (entry) => entry.code === projectCode
+        )
+        const projectId = projectEntry ? projectEntry.id : null // Get projectId if found
+        const suggestedMinutes = calculatedMinutes[projectCode] || {} // Get suggested minutes as an object
 
         // Ensure suggestedMinutes is an object and access its properties safely
-        const allocatedMinutes = suggestedMinutes.allocatedMinutes || 0; // Default to 0 if not found
+        const allocatedMinutes = suggestedMinutes.allocatedMinutes || 0 // Default to 0 if not found
 
         return (
             <>
                 {suggestedMinutes.allocatedMinutes > 0 && (
                     <>
-                        <input type="hidden" className="projectId" name="projectId" value={projectId} />
+                        <input
+                            type="hidden"
+                            className="projectId"
+                            name="projectId"
+                            value={projectId}
+                        />
                         <InputGroup>
-                    <FloatingLabel>Confirmed Minutes (suggested: {allocatedMinutes})</FloatingLabel>
-                    <FormControl
-                        type="number"
-                        placeholder={allocatedMinutes}
-                        required
-                        className="confirmed-minutes"
-                        value={calculatedMinutes[projectCode]?.confirmedMinutes}
-                        onChange={(e) => handleInputChange(e, projectCode, e.target.value)}
-                    />
-                </InputGroup>
-                <InputGroup>
-                    {allocatedMinutes > 0 && (
-                        <FormSelect
-                            className="task-select"
-                            onChange={(e) => handleTaskChange(projectCode, e.target.value)}
-                            value={inputValues[projectCode]?.taskId || ''}
-                            required
-                        >
-                            <option value="">Select a task</option>
-                            {sortEntriesByTaskName(filteredTasksArray).map(task => (
-                                <option key={task.id} value={task.id}>
-                                    {task.name}
-                                </option>
-                            ))}
-                        </FormSelect>
-                    )}
-                </InputGroup>
+                            <FloatingLabel>
+                                Confirmed Minutes (suggested: {allocatedMinutes}
+                                )
+                            </FloatingLabel>
+                            <FormControl
+                                type="number"
+                                placeholder={allocatedMinutes}
+                                required
+                                className="confirmed-minutes"
+                                value={
+                                    inputValues[projectCode]
+                                        ?.confirmedMinutes || ''
+                                }
+                                onChange={(e) =>
+                                    handleInputChange(
+                                        e,
+                                        projectCode,
+                                        e.target.value
+                                    )
+                                }
+                            />
+                        </InputGroup>
+                        <InputGroup>
+                            {allocatedMinutes > 0 && (
+                                <FormSelect
+                                    className="task-select"
+                                    onChange={(e) =>
+                                        handleTaskChange(
+                                            projectCode,
+                                            e.target.value
+                                        )
+                                    }
+                                    value={
+                                        inputValues[projectCode]?.taskId || ''
+                                    }
+                                    required
+                                >
+                                    <option value="">Select a task</option>
+                                    {sortEntriesByTaskName(
+                                        filteredTasksArray
+                                    ).map((task) => (
+                                        <option key={task.id} value={task.id}>
+                                            {task.name}
+                                        </option>
+                                    ))}
+                                </FormSelect>
+                            )}
+                        </InputGroup>
                     </>
                 )}
             </>
-        );
-    };
-    
-    console.log("inputValues", inputValues);
+        )
+    }
+
+    console.log('inputValues', inputValues)
     // console.log("billableHours", billableHours);
 
     return (
@@ -137,32 +175,68 @@ const BillableHours = ({ billableHours, calculatedMinutes }) => {
                             <th>Project Code</th>
                             <th>Billable Hours</th>
                             <th>Percentage of Total</th>
-                            {calculatedMinutes && Object.keys(calculatedMinutes).length > 0 && <th>Calculated Minutes</th>}
-                            {calculatedMinutes && Object.keys(calculatedMinutes).length > 0 && <th>Inputs</th>}
+                            {calculatedMinutes &&
+                                Object.keys(calculatedMinutes).length > 0 && (
+                                    <th>Calculated Minutes</th>
+                                )}
+                            {calculatedMinutes &&
+                                Object.keys(calculatedMinutes).length > 0 && (
+                                    <th>Inputs</th>
+                                )}
                         </tr>
                     </thead>
                     <tbody>
-                        {billableHours.map(({ projectCode, hours, percentage }) => {
-                            const minutes = calculatedMinutes[projectCode]?.allocatedMinutes || 'N/A'; // Get calculated minutes or 'N/A' if not found
-                            const isCrossedOff = (calculatedMinutes[projectCode] && minutes === "N/A") || hours < numHoursToCrossOff; // Determine if the row should be crossed off
-                            
-                            return (
-                                <tr key={projectCode} style={{ textDecoration: isCrossedOff ? 'line-through' : 'none' }}>
-                                    <td>{projectCode}</td>
-                                    <td>{parseFloat(hours.toFixed(2))}</td>
-                                    <td>{percentage > 0 ? `${parseFloat(percentage).toFixed(2)}%` : 'N/A'}</td>
-                                    {calculatedMinutes && Object.keys(calculatedMinutes).length > 0 && <td>{minutes}</td>}
-                                    {calculatedMinutes && Object.keys(calculatedMinutes).length > 0 && <td>{InputFieldComponent(projectCode)}</td>}
-                                </tr>
-                            );
-                        })}
+                        {billableHours.map(
+                            ({ projectCode, hours, percentage }) => {
+                                const minutes =
+                                    calculatedMinutes[projectCode]
+                                        ?.allocatedMinutes || 'N/A' // Get calculated minutes or 'N/A' if not found
+                                const isCrossedOff =
+                                    (calculatedMinutes[projectCode] &&
+                                        minutes === 'N/A') ||
+                                    hours < numHoursToCrossOff // Determine if the row should be crossed off
+
+                                return (
+                                    <tr
+                                        key={projectCode}
+                                        style={{
+                                            textDecoration: isCrossedOff
+                                                ? 'line-through'
+                                                : 'none',
+                                        }}
+                                    >
+                                        <td>{projectCode}</td>
+                                        <td>{parseFloat(hours.toFixed(2))}</td>
+                                        <td>
+                                            {percentage > 0
+                                                ? `${parseFloat(percentage).toFixed(2)}%`
+                                                : 'N/A'}
+                                        </td>
+                                        {calculatedMinutes &&
+                                            Object.keys(calculatedMinutes)
+                                                .length > 0 && (
+                                                <td>{minutes}</td>
+                                            )}
+                                        {calculatedMinutes &&
+                                            Object.keys(calculatedMinutes)
+                                                .length > 0 && (
+                                                <td>
+                                                    {InputFieldComponent(
+                                                        projectCode
+                                                    )}
+                                                </td>
+                                            )}
+                                    </tr>
+                                )
+                            }
+                        )}
                     </tbody>
                 </table>
             ) : (
                 <p>No billable hours found.</p>
             )}
         </div>
-    );
-};
+    )
+}
 
-export default BillableHours;
+export default BillableHours
