@@ -10,6 +10,7 @@ const Header = () => {
                 style={{
                     backgroundColor: '#1B2A4A',
                     fontFamily: "'Playfair Display', Georgia, serif",
+                    borderRadius: '12px',
                 }}
             >
                 <Navbar.Brand
@@ -21,19 +22,17 @@ const Header = () => {
                         color: '#FFF8F0',
                     }}
                 >
-                    Poppins Harvest
+                    <img src="/logo.svg" alt="Umbrella" style={{ marginLeft: '0.75rem' }} />
+                    <span style={{ display: 'inline-flex', flexDirection: 'column', lineHeight: 1.1 }}>
+                        <span>Umbrella</span>
+                        <span style={{ fontSize: '0.75rem', fontStyle: 'italic', color: '#D4A0A0', fontWeight: 400 }}>Poppins</span>
+                    </span>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ml-auto">
                         <Nav.Link href="/" style={{ color: '#D4A0A0' }}>Home</Nav.Link>
                         <Nav.Link href="/time-entries" style={{ color: '#D4A0A0' }}>Harvest Time</Nav.Link>
-                        <Nav.Link href="/users" style={{ color: '#D4A0A0' }}>Harvest Users</Nav.Link>
-                        <Nav.Link href="/tasks" style={{ color: '#D4A0A0' }}>Harvest Tasks</Nav.Link>
-                        <Nav.Link href="/harvest-projects" style={{ color: '#D4A0A0' }}>Harvest Projects</Nav.Link>
-                        {/* <Nav.Link href="/jira-tickets">Jira Tickets</Nav.Link> */}
-                        <Nav.Link href="/jira-users" style={{ color: '#D4A0A0' }}>Jira Users</Nav.Link>
-                        <Nav.Link href="/jira-projects" style={{ color: '#D4A0A0' }}>Jira Projects</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

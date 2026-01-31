@@ -274,6 +274,14 @@ tr:hover {
     font-weight: 700 !important;
     font-size: 1.3rem !important;
     letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-brand img {
+    height: 32px;
+    width: auto;
 }
 
 .nav-link {

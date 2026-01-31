@@ -18,6 +18,8 @@ import HarvestProjectsPage from './pages/HarvestProjectsPage' // Import the new 
 import { Container } from 'react-bootstrap'
 import JiraProjectsPage from './pages/JiraProjectsPage'
 import JiraIssuesPage from './pages/JiraIssuesPage'
+import HomePage from './pages/HomePage'
+import Footer from './components/Footer'
 
 const App = () => {
     return (
@@ -28,7 +30,7 @@ const App = () => {
                     <Routes>
                         <Route
                             path="/"
-                            element={<h1>Welcome to the Time Tracking App</h1>}
+                            element={<HomePage />}
                         />
                         <Route path="/users" element={<UsersPage />} />
                         <Route
@@ -78,6 +80,7 @@ const App = () => {
                         {/* Other routes can be added here */}
                     </Routes>
                 </div>
+                <Footer />
             </Container>
         </Router>
     )

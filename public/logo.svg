@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Umbrella canopy -->
+  <path d="M8 32 C8 16 24 4 32 4 C40 4 56 16 56 32 Z" fill="#C41E3A"/>
+  <!-- Canopy scallops -->
+  <path d="M8 32 C12 26 18 32 22 26 C26 32 28 26 32 32 C36 26 38 32 42 26 C46 32 52 26 56 32" fill="none" stroke="#FFF8F0" stroke-width="2"/>
+  <!-- Handle shaft -->
+  <line x1="32" y1="32" x2="32" y2="54" stroke="#1B2A4A" stroke-width="3" stroke-linecap="round"/>
+  <!-- Handle hook -->
+  <path d="M32 54 C32 58 28 58 28 54" fill="none" stroke="#1B2A4A" stroke-width="3" stroke-linecap="round"/>
+  <!-- Small gold star accent -->
+  <circle cx="32" cy="6" r="2" fill="#D4AF37"/>
+</svg>
