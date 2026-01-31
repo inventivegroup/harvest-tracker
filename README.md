@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Umbrella | Poppins
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Practically perfect time splitting in every way.
 
-## Available Scripts
+Umbrella is an internal tool for splitting and redistributing Harvest time entries across billable projects, with Jira integration for ticket tracking.
 
-In the project directory, you can run:
+## What It Does
 
-### `npm start`
+1. **Fetch Time Entries** — Pull Harvest time entries for this week or last week
+2. **Select a User** — Choose whose entries to work with
+3. **Pick Entries to Split** — Select 1x1 or bill-to-client entries
+4. **Split Time** — Distribute minutes across projects using a greedy fill algorithm based on billable hour percentages, rounded to the nearest 5 minutes
+5. **Preview & Submit** — Review the new entries and submit them back to Harvest
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Entry Types
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **1x1** — Entries are split between two users with fuzzy name matching from notes
+- **Bill to Client** — Entries are distributed across billable projects proportionally, filling largest projects first
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React 18
+- Redux + redux-thunk (state management)
+- React Router (multi-step navigation)
+- React Bootstrap (UI components)
+- Tailwind CSS + custom Mary Poppins theme
 
-### `npm run build`
+## Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Node.js
+- Backend API running ([harvest-tracker-api](https://harvest-tracker-api.onrender.com))
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Install & Run
 
-### `npm run eject`
+```bash
+npm install
+npm run dev
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Opens at [http://localhost:3000](http://localhost:3000).
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Scripts
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm start` | Serve production build |
+| `npm test` | Run tests in watch mode |
+| `npm run format` | Format code with Prettier |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Project Structure
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+src/
+  components/    # Reusable UI components (Header, Footer, Loader, etc.)
+  pages/         # Step-by-step workflow pages (TimeEntriesPage 1-6)
+  store/
+    actions/     # Redux action creators (timeEntries, users, projects, tasks, jira)
+    reducers/    # Redux reducers
+  utils/         # Helper functions, role mapping, test data
+public/
+  logo.svg       # Umbrella logo
+  hero.svg       # Home page hero image
+  favicon.svg    # Browser favicon
+```
