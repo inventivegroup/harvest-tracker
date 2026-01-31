@@ -99,7 +99,7 @@ const TimeEntriesPage = () => {
                     <option value="lastWeek">Last Week</option>
                 </FormSelect>
             </label>
-            <Button onClick={handleCalculateHours}>Calculate Hours</Button>{' '}
+            <Button style={{ marginLeft: '1rem' }} onClick={handleCalculateHours}>Calculate Hours</Button>{' '}
             {/* Button to calculate billable hours */}
             {/* Display the chosen date range */}
             {dateRange && <p>{dateRange}</p>}
@@ -119,7 +119,7 @@ const TimeEntriesPage = () => {
                     <Button onClick={() => navigate('/time-entries-step-2')}>
                         Go to Step 2
                     </Button>
-                    <Button onClick={() => navigate('/time-spent')}>
+                    <Button style={{ marginLeft: '0.5rem' }} onClick={() => navigate('/time-spent')}>
                         Go to Time Spent
                     </Button>
                 </>

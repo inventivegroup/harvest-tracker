@@ -180,7 +180,7 @@ const SelectedEntriesTable = ({ selectedHarvestEntries }) => {
         <div>
             <h2>Selected Entries</h2>
             {selectedHarvestEntries.length > 0 ? (
-                <table className="selected-entries-table table table-bordered">
+                <table className="selected-entries-table">
                     <thead>
                         <tr>
                             <th>

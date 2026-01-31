@@ -72,7 +72,7 @@ const TimeEntriesPage2 = () => {
                     ))}
                 </FormSelect>
 
-                <Button type="submit">Fetch Time Entries</Button>
+                <Button style={{ marginLeft: '0.5rem' }} type="submit">Fetch Time Entries</Button>
             </form>
 
             {loadingTimeEntries ? (

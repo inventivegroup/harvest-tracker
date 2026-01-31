@@ -107,15 +107,15 @@ const TimeEntriesList = ({ userTimeEntries }) => {
             <h2>Time Entries</h2>
             <h3>Total Hours for All Entries: {totalHours} hours</h3>{' '}
             {/* Display total hours for all entries */}
-            <Button variant="info" onClick={handleSelectAll1x1}>
+            <Button variant="primary" onClick={handleSelectAll1x1}>
                 Select All 1x1 Entries
             </Button>{' '}
             {/* Button to select all entries with "1x1" in the description */}
-            <Button variant="warning" onClick={handleSelectAllBillToClient}>
+            <Button style={{ marginLeft: '0.5rem' }} variant="success" onClick={handleSelectAllBillToClient}>
                 Select All "Bill to Client" Entries
             </Button>{' '}
             {/* Button to select all entries with "bill to client" in task.name */}
-            <Button variant="secondary" onClick={handleClearSelections}>
+            <Button style={{ marginLeft: '0.5rem' }} variant="secondary" onClick={handleClearSelections}>
                 Clear All Selections
             </Button>{' '}
             {/* Button to clear all selected checkboxes */}
@@ -167,7 +167,7 @@ const TimeEntriesList = ({ userTimeEntries }) => {
                                             return (
                                                 <tr
                                                     key={entry.id}
-                                                    className={`${selectedHarvestEntries[entry.id] ? 'selected-row' : ''} ${rowClass}`}
+                                                    className={`${selectedHarvestEntries[entry.id] ? `selected-row ${rowClass}` : ''}`}
                                                 >
                                                     <td>
                                                         <FormCheck

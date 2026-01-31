@@ -153,7 +153,7 @@ const UserList = () => {
                         </FormSelect>
                     </label>
 
-                    <Button onClick={handleCalculateHours}>
+                    <Button style={{ marginLeft: '0.5rem' }} onClick={handleCalculateHours}>
                         Calculate Hours
                     </Button>
 
