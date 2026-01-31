@@ -1,6 +1,7 @@
 ## Description
 
 <!-- Provide a short summary of the changes. -->
+
 Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context.
 
 Fixes #(issue)
@@ -17,20 +18,23 @@ Fixes #(issue)
 ## How Has This Been Tested?
 
 <!-- Describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. -->
+
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] Manual test (describe what you did)
 
 **Test Configuration**:
-* Operating system:
-* Browser (if applicable):
-* Version:
+
+- Operating system:
+- Browser (if applicable):
+- Version:
 
 ## Screenshots (if applicable):
 
 <!-- Please add screenshots to help explain your changes, especially if it is a UI change. -->
-| Before | After |
-|--------|-------|
+
+| Before  | After   |
+| ------- | ------- |
 | Image 1 | Image 2 |
 
 ## Checklist:

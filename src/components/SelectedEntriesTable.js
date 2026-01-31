@@ -14,6 +14,11 @@ const fuzzyMatchUser = (notes, users) => {
     // Names to exclude from matching
     const excludedNames = ['christina', 'andy', 'james']
 
+    // Name aliases for matching (nickname -> full name)
+    const nameAliases = {
+        alex: 'alexander',
+    }
+
     // Extract potential names from notes by splitting on common separators
     const words = notes
         .replace(/[❇️⏸]/g, '') // Remove emojis
@@ -34,11 +39,13 @@ const fuzzyMatchUser = (notes, users) => {
             if (excludedNames.includes(firstName)) {
                 continue
             }
+            // Check if word has an alias and use it for matching
+            const wordToMatch = nameAliases[word] || word
             // Check for exact match or if one contains the other
             if (
-                firstName === word ||
-                firstName.startsWith(word) ||
-                word.startsWith(firstName)
+                firstName === wordToMatch ||
+                firstName.startsWith(wordToMatch) ||
+                wordToMatch.startsWith(firstName)
             ) {
                 return user.id
             }
@@ -173,7 +180,7 @@ const SelectedEntriesTable = ({ selectedHarvestEntries }) => {
         <div>
             <h2>Selected Entries</h2>
             {selectedHarvestEntries.length > 0 ? (
-                <table className="selected-entries-table table table-bordered">
+                <table className="selected-entries-table">
                     <thead>
                         <tr>
                             <th>

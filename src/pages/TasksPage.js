@@ -1,15 +1,14 @@
-import React from 'react';
+import React from 'react'
 
-import TasksList from '../components/TasksList';
+import TasksList from '../components/TasksList'
 
 const TasksPage = () => {
-
     return (
-        <div className='container mx-auto p-4'>
+        <div className="container mx-auto p-4">
             <h1>Tasks</h1>
             <TasksList />
         </div>
-    );
-};
+    )
+}
 
-export default TasksPage;
+export default TasksPage

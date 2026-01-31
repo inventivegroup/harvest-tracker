@@ -1,5 +1,5 @@
-import React from 'react';
-import { Table } from 'react-bootstrap';
+import React from 'react'
+import { Table } from 'react-bootstrap'
 
 const HarvestEntryTable = ({ harvestEntries }) => {
     return (
@@ -18,16 +18,19 @@ const HarvestEntryTable = ({ harvestEntries }) => {
                 {harvestEntries.map((entry, index) => (
                     <tr key={index}>
                         <td>{entry.user_id}</td>
-                        <td>{entry.project_id}<br></br>{entry.projectCode && `(${entry.projectCode})`}</td>
+                        <td> {entry.project_id}<br></br>{entry.code}</td>
                         <td>{entry.task_id}</td>
                         <td>{entry.spent_date}</td>
-                        <td>{parseFloat(entry.hours).toFixed(2)} ({Math.round(entry.hours * 60)} minutes)</td>
+                        <td>
+                            {parseFloat(entry.hours).toFixed(2)} (
+                            {Math.round(entry.hours * 60)} minutes)
+                        </td>
                         <td>{entry.notes}</td>
                     </tr>
                 ))}
             </tbody>
         </Table>
-    );
-};
+    )
+}
 
-export default HarvestEntryTable;
+export default HarvestEntryTable

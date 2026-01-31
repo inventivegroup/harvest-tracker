@@ -13,7 +13,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture
 
-"Time Splitter" - a React 18 internal tool for splitting and managing Harvest time entries across projects, with Jira integration for ticket tracking.
+"Umbrella | Poppins" - a React 18 internal tool for splitting and managing Harvest time entries across projects, with Jira integration for ticket tracking.
 
 ### State Management (Redux + redux-thunk)
 
@@ -53,6 +53,10 @@ Maps Harvest user IDs to employee names and primary roles (QA, SA, SSE, WebDev, 
 
 ### Multi-Step Time Entry Workflow
 
-`/time-entries` (Step 1: fetch by date range) → `/time-entries-step-2` → ... → `/time-entries-step-5` (submit entries)
+`/time-entries` (Step 1: fetch by date range) → `/time-entries-step-2` (select user & entries) → `/time-entries-step-3` (review selected entries) → Step 4 or Step 6 → `/time-entries-step-5` (preview & submit)
+
+Two paths from Step 3 based on entry type:
+- **1x1 entries** → `/time-entries-step-4` — Split between two users with fuzzy name matching
+- **Bill-to-client entries** → `/time-entries-step-6` — Greedy fill algorithm distributes time across billable projects by percentage (largest projects fill first, rounded to nearest 5 minutes)
 
 Each step page passes state via Redux; navigation uses react-router-dom's `useNavigate`.

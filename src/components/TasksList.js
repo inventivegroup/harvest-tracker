@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'react-bootstrap';
-import { fetchTasks } from '../store/actions/taskActions';
-import Loader from './Loader';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Table } from 'react-bootstrap'
+import { fetchTasks } from '../store/actions/taskActions'
+import Loader from './Loader'
 
 const TasksList = () => {
-    const dispatch = useDispatch();
-    const { allTasks, loading, error } = useSelector((state) => state.tasks); // Include loading and error states
+    const dispatch = useDispatch()
+    const { allTasks, loading, error } = useSelector((state) => state.tasks) // Include loading and error states
 
     useEffect(() => {
-        dispatch(fetchTasks());
-    }, [dispatch]);
+        dispatch(fetchTasks())
+    }, [dispatch])
 
-    const state = useSelector(state => state);
-    console.log(state); // Check the structure of the state
+    const state = useSelector((state) => state)
+    console.log(state) // Check the structure of the state
 
     return (
         <div className="tasks-list">
@@ -31,7 +31,7 @@ const TasksList = () => {
                     </thead>
                     <tbody>
                         {allTasks.length > 0 ? (
-                            allTasks.map(task => (
+                            allTasks.map((task) => (
                                 <tr key={task.id}>
                                     <td>{task.id}</td>
                                     <td>{task.name}</td>
@@ -46,7 +46,7 @@ const TasksList = () => {
                 </Table>
             )}
         </div>
-    );
-};
+    )
+}
 
-export default TasksList;
+export default TasksList

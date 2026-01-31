@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <!-- Sky gradient -->
+  <defs>
+    <linearGradient id="sky" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#FFF8F0;stop-opacity:0.2" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" fill="url(#sky)" rx="12"/>
+
+  <!-- Clouds -->
+  <g opacity="0.5">
+    <ellipse cx="120" cy="80" rx="60" ry="25" fill="#FFFFFF"/>
+    <ellipse cx="160" cy="70" rx="50" ry="20" fill="#FFFFFF"/>
+    <ellipse cx="90" cy="75" rx="40" ry="18" fill="#FFFFFF"/>
+  </g>
+  <g opacity="0.4">
+    <ellipse cx="620" cy="60" rx="55" ry="22" fill="#FFFFFF"/>
+    <ellipse cx="660" cy="50" rx="45" ry="18" fill="#FFFFFF"/>
+    <ellipse cx="590" cy="55" rx="35" ry="16" fill="#FFFFFF"/>
+  </g>
+  <g opacity="0.3">
+    <ellipse cx="380" cy="40" rx="50" ry="20" fill="#FFFFFF"/>
+    <ellipse cx="420" cy="32" rx="40" ry="16" fill="#FFFFFF"/>
+  </g>
+
+  <!-- London rooftops silhouette -->
+  <g fill="#1B2A4A" opacity="0.15">
+    <!-- Buildings -->
+    <rect x="50" y="280" width="60" height="120"/>
+    <rect x="120" y="260" width="45" height="140"/>
+    <rect x="175" y="290" width="55" height="110"/>
+    <rect x="240" y="250" width="40" height="150"/>
+    <!-- Clock tower -->
+    <rect x="290" y="220" width="35" height="180"/>
+    <rect x="295" y="200" width="25" height="30"/>
+    <polygon points="307,185 295,200 320,200" />
+    <!-- More buildings -->
+    <rect x="340" y="275" width="50" height="125"/>
+    <rect x="400" y="260" width="65" height="140"/>
+    <rect x="475" y="285" width="45" height="115"/>
+    <rect x="530" y="255" width="50" height="145"/>
+    <rect x="590" y="270" width="60" height="130"/>
+    <rect x="660" y="250" width="40" height="150"/>
+    <rect x="710" y="280" width="55" height="120"/>
+  </g>
+
+  <!-- Large umbrella -->
+  <g transform="translate(400, 160)">
+    <!-- Umbrella canopy -->
+    <path d="M-100 0 C-100-60 -50-110 0-110 C50-110 100-60 100 0 Z" fill="#C41E3A"/>
+    <!-- Canopy highlights -->
+    <path d="M-100 0 C-80-15 -60 0 -40-15 C-20 0 0-15 20 0 C40-15 60 0 80-15 C95 0 100 0 100 0" fill="none" stroke="#FFF8F0" stroke-width="2.5" opacity="0.6"/>
+    <!-- Canopy segments -->
+    <line x1="-50" y1="-5" x2="-30" y2="-95" stroke="#a01830" stroke-width="1" opacity="0.3"/>
+    <line x1="0" y1="-5" x2="0" y2="-108" stroke="#a01830" stroke-width="1" opacity="0.3"/>
+    <line x1="50" y1="-5" x2="30" y2="-95" stroke="#a01830" stroke-width="1" opacity="0.3"/>
+    <!-- Handle -->
+    <line x1="0" y1="0" x2="0" y2="90" stroke="#1B2A4A" stroke-width="4" stroke-linecap="round"/>
+    <!-- Handle hook -->
+    <path d="M0 90 C0 105 -15 105 -15 90" fill="none" stroke="#1B2A4A" stroke-width="4" stroke-linecap="round"/>
+    <!-- Gold tip -->
+    <circle cx="0" cy="-110" r="3.5" fill="#D4AF37"/>
+  </g>
+
+  <!-- Clock faces on the tower -->
+  <circle cx="307" cy="212" r="8" fill="#FFF8F0" opacity="0.15"/>
+
+  <!-- Decorative gold stars -->
+  <g fill="#D4AF37" opacity="0.6">
+    <circle cx="200" cy="120" r="3"/>
+    <circle cx="550" cy="90" r="2.5"/>
+    <circle cx="680" cy="140" r="2"/>
+    <circle cx="150" cy="170" r="2"/>
+    <circle cx="650" cy="170" r="3"/>
+  </g>
+
+  <!-- Dusty rose decorative dots -->
+  <g fill="#D4A0A0" opacity="0.4">
+    <circle cx="100" cy="140" r="4"/>
+    <circle cx="700" cy="110" r="3.5"/>
+    <circle cx="250" cy="100" r="3"/>
+    <circle cx="500" cy="130" r="3"/>
+  </g>
+</svg>
