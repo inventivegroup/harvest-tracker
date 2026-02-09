@@ -35,6 +35,11 @@ const TimeEntriesPage = () => {
     const calculatedMinutes = {}
     const [dateRange, setDateRange] = useState('')
 
+    const formatDateRange = (weekValue) => {
+        const { startDate, endDate } = calculateDates(weekValue)
+        return `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
+    }
+
     console.log('timeEntriesByDate', timeEntriesByDate)
     const handleCalculateHours = async () => {
         setLoadingBillableHours(true)
@@ -95,14 +100,12 @@ const TimeEntriesPage = () => {
             <label>
                 <FloatingLabel>Week:</FloatingLabel>
                 <FormSelect value={selectedWeek} onChange={handleWeekChange}>
-                    <option value="thisWeek">This Week</option>
-                    <option value="lastWeek">Last Week</option>
+                    <option value="thisWeek">{formatDateRange('thisWeek')}</option>
+                    <option value="lastWeek">{formatDateRange('lastWeek')}</option>
                 </FormSelect>
             </label>
             <Button style={{ marginLeft: '1rem' }} onClick={handleCalculateHours}>Calculate Hours</Button>{' '}
             {/* Button to calculate billable hours */}
-            {/* Display the chosen date range */}
-            {dateRange && <p>{dateRange}</p>}
             {loadingBillableHours ? (
                 <Loader />
             ) : (
