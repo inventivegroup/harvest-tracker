@@ -333,7 +333,7 @@ const TimeEntriesPage6 = () => {
 
     return (
         <div className="time-entries-page">
-            <h1>Time Entries Page 6 - Bill to Client</h1>
+            <h1>Time Entries - Allocate Minutes</h1>
 
             {splitTimeEntries.length > 0 ? (
                 <div className="split-time-entries-container">
