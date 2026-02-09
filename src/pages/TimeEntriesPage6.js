@@ -13,6 +13,9 @@ const TimeEntriesPage6 = () => {
     const [savedEntries, setSavedEntries] = useState({})
     const [tasksSelected, setTasksSelected] = useState(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState({})
+    const [excludedProjects, setExcludedProjects] = useState(new Set())
+    const [allocationsLocked, setAllocationsLocked] = useState(false)
+    const [confirmedAllocations, setConfirmedAllocations] = useState(null)
 
     const entryType = useSelector((state) => state.timeEntries.entryType)
     const harvestEntries = useSelector((state) => state.timeEntries.harvestEntries)
@@ -61,12 +64,52 @@ const TimeEntriesPage6 = () => {
         return allocations
     }, [billableHours, totalMinutesToDistribute])
 
+    const adjustedAllocations = useMemo(() => {
+        if (excludedProjects.size === 0) return projectAllocations
+
+        const included = projectAllocations.filter(
+            (p) => !excludedProjects.has(p.projectCode)
+        )
+        if (included.length === 0) return []
+
+        const totalIncludedHours = included.reduce((s, p) => s + p.hours, 0)
+
+        let adjusted = included.map((p) => {
+            const newPercentage = (p.hours / totalIncludedHours) * 100
+            return {
+                projectCode: p.projectCode,
+                hours: p.hours,
+                percentage: newPercentage,
+                allocatedMinutes: Math.max(
+                    5,
+                    roundToNearestFiveMinutes(
+                        totalMinutesToDistribute * (newPercentage / 100)
+                    )
+                ),
+            }
+        })
+
+        // Reconcile rounding so total matches
+        const totalAllocated = adjusted.reduce((s, p) => s + p.allocatedMinutes, 0)
+        if (totalAllocated !== totalMinutesToDistribute && adjusted.length > 0) {
+            const diff = totalAllocated - totalMinutesToDistribute
+            const largest = adjusted.reduce((max, p) =>
+                p.allocatedMinutes > max.allocatedMinutes ? p : max
+            )
+            largest.allocatedMinutes = Math.max(5, largest.allocatedMinutes - diff)
+        }
+
+        return adjusted
+    }, [projectAllocations, excludedProjects, totalMinutesToDistribute])
+
     // --- Pre-compute greedy distribution across entries ---
     // Fill entries with projects largest-first. An entry may get 1 project
     // or split between projects at the boundary.
     const entryDistributions = useMemo(() => {
+        if (!confirmedAllocations || confirmedAllocations.length === 0) return {}
+
         // Sort projects largest allocation first
-        const sortedProjects = [...projectAllocations].sort(
+        const sortedProjects = [...confirmedAllocations].sort(
             (a, b) => b.allocatedMinutes - a.allocatedMinutes
         )
 
@@ -127,7 +170,33 @@ const TimeEntriesPage6 = () => {
         })
 
         return distributions
-    }, [projectAllocations, splitTimeEntries])
+    }, [confirmedAllocations, splitTimeEntries])
+
+    const handleToggleProject = (projectCode) => {
+        setExcludedProjects((prev) => {
+            const next = new Set(prev)
+            if (next.has(projectCode)) {
+                next.delete(projectCode)
+            } else {
+                next.add(projectCode)
+            }
+            return next
+        })
+    }
+
+    const handleConfirmAllocations = () => {
+        setConfirmedAllocations([...adjustedAllocations])
+        setAllocationsLocked(true)
+    }
+
+    const handleEditAllocations = () => {
+        setAllocationsLocked(false)
+        setConfirmedAllocations(null)
+        setInputValues({})
+        setSavedEntries({})
+        setIsButtonDisabled({})
+        setTasksSelected(false)
+    }
 
     // --- Phase 2: Handlers (same as Step 4) ---
 
@@ -236,6 +305,7 @@ const TimeEntriesPage6 = () => {
                         hours: projectData.confirmedMinutes / 60,
                         user_id: projectData.userId,
                         notes: projectData.projectNotes || '',
+                        groupId: entryId,
                     }
                     newHarvestEntries.push(entryData)
                 }
@@ -273,6 +343,7 @@ const TimeEntriesPage6 = () => {
                     <table className="table table-striped">
                         <thead>
                             <tr>
+                                {!allocationsLocked && <th>Include</th>}
                                 <th>Project Code</th>
                                 <th>Billable Hours</th>
                                 <th>Percentage</th>
@@ -280,23 +351,50 @@ const TimeEntriesPage6 = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {projectAllocations.map((project) => (
-                                <tr key={project.projectCode}>
-                                    <td>{project.projectCode}</td>
-                                    <td>{parseFloat(project.hours.toFixed(2))}</td>
-                                    <td>{parseFloat(project.percentage).toFixed(2)}%</td>
-                                    <td>{project.allocatedMinutes}</td>
-                                </tr>
-                            ))}
+                            {projectAllocations.map((project) => {
+                                const isExcluded = excludedProjects.has(project.projectCode)
+                                const adjusted = adjustedAllocations.find(
+                                    (a) => a.projectCode === project.projectCode
+                                )
+                                return (
+                                    <tr
+                                        key={project.projectCode}
+                                        style={isExcluded ? { opacity: 0.4, textDecoration: 'line-through' } : {}}
+                                    >
+                                        {!allocationsLocked && (
+                                            <td>
+                                                <Form.Check
+                                                    type="checkbox"
+                                                    checked={!isExcluded}
+                                                    onChange={() => handleToggleProject(project.projectCode)}
+                                                />
+                                            </td>
+                                        )}
+                                        <td>{project.projectCode}</td>
+                                        <td>{parseFloat(project.hours.toFixed(2))}</td>
+                                        <td>
+                                            {isExcluded
+                                                ? '(excluded)'
+                                                : `${parseFloat(adjusted?.percentage ?? project.percentage).toFixed(2)}%`}
+                                        </td>
+                                        <td>
+                                            {isExcluded
+                                                ? 0
+                                                : adjusted?.allocatedMinutes ?? project.allocatedMinutes}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                         <tfoot>
                             <tr>
+                                {!allocationsLocked && <td></td>}
                                 <td><strong>Total</strong></td>
                                 <td></td>
                                 <td></td>
                                 <td>
                                     <strong>
-                                        {projectAllocations.reduce(
+                                        {adjustedAllocations.reduce(
                                             (s, p) => s + p.allocatedMinutes, 0
                                         )}
                                     </strong>
@@ -305,9 +403,28 @@ const TimeEntriesPage6 = () => {
                         </tfoot>
                     </table>
 
+                    {!allocationsLocked ? (
+                        <Button
+                            variant="primary"
+                            onClick={handleConfirmAllocations}
+                            disabled={adjustedAllocations.length === 0}
+                            style={{ marginBottom: '20px' }}
+                        >
+                            Confirm Allocations
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="outline-secondary"
+                            onClick={handleEditAllocations}
+                            style={{ marginBottom: '20px' }}
+                        >
+                            Edit Allocations
+                        </Button>
+                    )}
+
                     {/* Phase 2: Entry-by-entry forms */}
-                    <h2>Distribute Time Entries</h2>
-                    {splitTimeEntries.map((entry, index) => {
+                    {allocationsLocked && <h2>Distribute Time Entries</h2>}
+                    {allocationsLocked && splitTimeEntries.map((entry, index) => {
                         const minutes = Math.round(
                             entry.originalEntry.hours * 60
                         )
@@ -436,7 +553,7 @@ const TimeEntriesPage6 = () => {
                             </div>
                         )
                     })}
-                    {allEntriesSaved && (
+                    {allocationsLocked && allEntriesSaved && (
                         <div>
                             <Button
                                 variant="success"

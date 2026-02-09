@@ -11,6 +11,7 @@ const TimeEntriesPage5 = () => {
     const [loading, setLoading] = useState(false)
     const harvestEntries = useSelector((state) => state.timeEntries.harvestEntries)
     const { allProjects } = useSelector((state) => state.projects);
+    const { allTasks } = useSelector((state) => state.tasks);
     // const allProjects = testData.projects.allProjects;
     // const harvestEntries = harvestEntriesSaved;
     const [mappedEntries, setMappedEntries] = useState([]); // State to hold mapped entries
@@ -23,15 +24,18 @@ const TimeEntriesPage5 = () => {
         if (allProjects.length > 0) {
             const mapped = harvestEntries.map(entry => {
                 console.log('entry', entry)
-                const project = allProjects.find(p => p.id === entry.project_id); // Assuming entry has projectId
+                const project = allProjects.find(p => String(p.id) === String(entry.project_id));
+                const task = allTasks.find(t => String(t.id) === String(entry.task_id));
                 return {
                     ...entry,
-                    code: project ? project.code : 'Unknown', // Map project name or set to 'Unknown'
+                    code: project ? project.code : 'Unknown',
+                    projectName: project ? project.name : 'Unknown',
+                    taskName: task ? task.name : 'Unknown',
                 };
             });
             setMappedEntries(mapped);
         }
-    }, [allProjects]); // Run when projects are fetched
+    }, [allProjects, allTasks, harvestEntries]); // Run when projects/tasks are fetched
 
     console.log('mappedEntries', mappedEntries)
     // const harvestEntries = harvestEntriesSaved;
