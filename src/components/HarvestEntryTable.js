@@ -10,7 +10,7 @@ const groupStyles = [
     { backgroundColor: '#fff3e0', borderLeft: '4px solid #FF9800' },
 ]
 
-const HarvestEntryTable = ({ harvestEntries }) => {
+const HarvestEntryTable = ({ harvestEntries, entryStatuses = {} }) => {
     const groupStyleMap = useMemo(() => {
         const map = {}
         let styleIndex = 0
@@ -33,6 +33,7 @@ const HarvestEntryTable = ({ harvestEntries }) => {
                     <th>Task</th>
                     <th>Minutes</th>
                     <th>Notes</th>
+                    {Object.keys(entryStatuses).length > 0 && <th>Status</th>}
                 </tr>
             </thead>
             <tbody>
@@ -45,6 +46,16 @@ const HarvestEntryTable = ({ harvestEntries }) => {
                             <td>{entry.taskName || entry.task_id}</td>
                             <td>{Math.round(entry.hours * 60)}</td>
                             <td>{entry.notes}</td>
+                            {Object.keys(entryStatuses).length > 0 && (
+                                <td style={{ textAlign: 'center', fontSize: '1.25rem' }}>
+                                    {entryStatuses[index] === 'success' && (
+                                        <span style={{ color: '#28a745' }}>&#10004;</span>
+                                    )}
+                                    {entryStatuses[index] === 'error' && (
+                                        <span style={{ color: '#dc3545' }}>&#10008;</span>
+                                    )}
+                                </td>
+                            )}
                         </tr>
                     )
                 })}

@@ -6,9 +6,8 @@ import { harvestEntriesSaved, testData } from '../utils/testData'
 import Loader from '../components/Loader'
 
 const TimeEntriesPage5 = () => {
-    const [successMessage, setSuccessMessage] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
     const [loading, setLoading] = useState(false)
+    const [entryStatuses, setEntryStatuses] = useState({})
     const harvestEntries = useSelector((state) => state.timeEntries.harvestEntries)
     const { allProjects } = useSelector((state) => state.projects);
     const { allTasks } = useSelector((state) => state.tasks);
@@ -43,9 +42,11 @@ const TimeEntriesPage5 = () => {
     const postNewHarvestEntries = async () => {
         console.log(JSON.stringify(harvestEntries))
         setLoading(true)
+        setEntryStatuses({})
 
-        try {
-            for (const entry of harvestEntries) {
+        for (let i = 0; i < harvestEntries.length; i++) {
+            const entry = harvestEntries[i]
+            try {
                 console.log('submitting post request for entry', entry)
                 const response = await fetch(
                     'https://harvest-tracker-api.onrender.com/api/create-harvest-time-entries',
@@ -54,47 +55,52 @@ const TimeEntriesPage5 = () => {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(entry), // Send the current entry
+                        body: JSON.stringify(entry),
                     }
                 )
 
                 if (!response.ok) {
-                    throw new Error(
-                        `Network response was not ok for entry: ${JSON.stringify(entry)}`
-                    )
+                    throw new Error(`HTTP ${response.status}`)
                 }
-                console.log('response', response)
+
                 const data = await response.json()
                 console.log('Success:', data)
+                setEntryStatuses((prev) => ({ ...prev, [i]: 'success' }))
+            } catch (error) {
+                console.error('Error posting entry:', error)
+                setEntryStatuses((prev) => ({ ...prev, [i]: 'error' }))
             }
-            // Set success message after all entries have been posted
-            setSuccessMessage('All entries have been submitted successfully!')
-        } catch (error) {
-            console.error('Error posting new harvest entries:', error)
-            setErrorMessage(
-                'Error submitting entries. Please try again. - ' + error
-            )
-            // Optionally, handle error (e.g., show an error message)
-        } finally {
-            setLoading(false)
         }
+
+        setLoading(false)
     }
 
     return (
         <div className="time-entries-page">
-            <h1>Time Entries Page 5</h1>
+            <h1>Time Entry Submission</h1>
             <div>
                 {mappedEntries && mappedEntries.length > 0 && (
                     <>
-                        <HarvestEntryTable harvestEntries={mappedEntries} />
-                        {successMessage && (
-                            <Alert variant="success">{successMessage}</Alert>
-                        )}
-                        {errorMessage && (
-                            <Alert variant="danger">{errorMessage}</Alert>
-                        )}
+                        <HarvestEntryTable
+                            harvestEntries={mappedEntries}
+                            entryStatuses={entryStatuses}
+                        />
                         {loading && <Loader />}
-                        {!loading && !successMessage && (
+                        {!loading && Object.keys(entryStatuses).length > 0 && (
+                            <Alert
+                                variant={
+                                    Object.values(entryStatuses).every((s) => s === 'success')
+                                        ? 'success'
+                                        : 'warning'
+                                }
+                            >
+                                {Object.values(entryStatuses).filter((s) => s === 'success').length} of{' '}
+                                {mappedEntries.length} entries submitted successfully.
+                                {Object.values(entryStatuses).some((s) => s === 'error') &&
+                                    ` ${Object.values(entryStatuses).filter((s) => s === 'error').length} failed.`}
+                            </Alert>
+                        )}
+                        {!loading && Object.keys(entryStatuses).length === 0 && (
                             <Button
                                 variant="primary"
                                 onClick={postNewHarvestEntries}
