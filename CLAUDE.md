@@ -57,6 +57,15 @@ Maps Harvest user IDs to employee names and primary roles (QA, SA, SSE, WebDev, 
 
 Two paths from Step 3 based on entry type:
 - **1x1 entries** → `/time-entries-step-4` — Split between two users with fuzzy name matching
-- **Bill-to-client entries** → `/time-entries-step-6` — Greedy fill algorithm distributes time across billable projects by percentage (largest projects fill first, rounded to nearest 5 minutes)
+- **Bill-to-client entries** → `/time-entries-step-6` ("Time Entries - Allocate Minutes") — User can exclude projects via checkboxes before confirming allocations. Greedy fill algorithm distributes time across remaining billable projects by percentage (largest projects fill first, rounded to nearest 5 minutes). Confirmed allocations are stored in state to prevent premature/stale computation.
+
+Step 5 ("Time Entry Submission") submits entries individually with per-entry success/failure indicators. Failures don't stop remaining submissions.
 
 Each step page passes state via Redux; navigation uses react-router-dom's `useNavigate`.
+
+### Common Pitfalls
+
+- Entry IDs from form inputs are strings; Redux store IDs are numbers. Always use `String()` coercion when comparing: `String(p.id) === String(entry.project_id)`
+- `setHarvestEntries` appends to existing array in Redux — entries are tagged with `groupId` for visual grouping in the preview table
+- `package-lock.json` is gitignored; `npm update` only changes `node_modules`, not `package.json`
+- `gh` CLI is not authenticated; PRs are created via GitHub web UI
